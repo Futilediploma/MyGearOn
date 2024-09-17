@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyGearOn Twitch Extension</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div id="gear-panel">
+        <h1>Streamer's Gear</h1>
+
+        <!-- Add the character search form here -->
+        <form id="character-search-form">
+            <label for="character-name">Character Name:</label>
+            <input type="text" id="character-name" name="character-name" required>
+            
+            <label for="character-realm">Realm:</label>
+            <input type="text" id="character-realm" name="character-realm" required>
+            
+            <button type="submit">Search Gear</button>
+            <div id="error-message" style="color: red; display: none;"></div> <!-- Error message area -->
+        </form>
+
+        <!-- Gear list will be populated here -->
+        <div id="gear-list"></div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
