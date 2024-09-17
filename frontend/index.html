@@ -3,27 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyGearOn Twitch Extension</title>
+    <title>MyGearOn - WoW Character Gear</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    <div id="gear-panel">
-        <h1>Streamer's Gear</h1>
-
-        <!-- Add the character search form here -->
+    <div id="app">
+        <h1>WoW Character Gear</h1>
+        
+        <!-- Search Form -->
         <form id="character-search-form">
-            <label for="character-name">Character Name:</label>
-            <input type="text" id="character-name" name="character-name" required>
-            
-            <label for="character-realm">Realm:</label>
-            <input type="text" id="character-realm" name="character-realm" required>
-            
-            <button type="submit">Search Gear</button>
-            <div id="error-message" style="color: red; display: none;"></div> <!-- Error message area -->
+            <input type="text" id="character-name" placeholder="Character Name" required>
+            <input type="text" id="character-realm" placeholder="Realm" required>
+            <button type="submit">Search</button>
         </form>
 
-        <!-- Gear list will be populated here -->
-        <div id="gear-list"></div>
+        <!-- Character Preview (Avatar or In-game Render) -->
+        <div id="character-preview" class="character-preview">
+            <!-- The character's preview (in-game render or avatar) will be displayed here -->
+        </div>
+
+        <!-- Total Item Level Display -->
+        <div id="item-level-display" class="item-level-display"></div>
+
+        <!-- Gear List -->
+        <div id="gear-list">
+            <!-- Gear items will appear here -->
+        </div>
+
+        <!-- Error Message Display -->
+        <div id="error-message" class="error-message" style="display: none;"></div>
     </div>
 
     <script src="js/main.js"></script>

@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const gearList = document.getElementById('gear-list');
     const searchForm = document.getElementById('character-search-form');
     const errorMessage = document.getElementById('error-message');
+    const itemLevelDisplay = document.getElementById('item-level-display');
+    const characterPreview = document.getElementById('character-preview');  // Element for character preview
 
     const regions = [
         { region: 'us', namespace: 'profile-us' },
@@ -10,9 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
         { region: 'tw', namespace: 'profile-tw' }
     ];
 
-    // Fetch the item media (icon) using WowThing CDN
     const fetchItemMedia = (itemId) => {
         return `https://img.wowthing.org/56/item/${itemId}.webp`;
+    };
+
+    // Fetch character media (avatar, in-game render) from Blizzard API
+    const fetchCharacterMedia = async (characterName, realm, regionInfo) => {
+        try {
+            const response = await fetch(`/api/gear/media/${characterName}/${realm}?region=${regionInfo.region}&namespace=${regionInfo.namespace}`);
+            if (response.ok) {
+                const mediaData = await response.json();
+                return mediaData;
+            }
+        } catch (error) {
+            console.error(`Error fetching character media for ${characterName} from ${regionInfo.region}:`, error);
+        }
+        return null;
     };
 
     const fetchGearForRegion = async (characterName, realm, regionInfo) => {
@@ -20,11 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`/api/gear/${characterName}/${realm}?region=${regionInfo.region}&namespace=${regionInfo.namespace}`);
             if (response.ok) {
                 const gearData = await response.json();
-                console.log(`Gear Data for ${characterName} from ${regionInfo.region}:`, gearData); // Log gear data
                 return gearData;
             }
         } catch (error) {
-            console.error(`Error fetching gear for region ${regionInfo.region}:`, error);
+            console.error(`Error fetching gear for ${characterName} from ${regionInfo.region}:`, error);
             throw new Error('Unable to fetch gear data due to server issues.');
         }
         return null;
@@ -38,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gearList.innerHTML = '';
         errorMessage.style.display = 'none';
+        itemLevelDisplay.textContent = '';  // Clear the item level display
+        characterPreview.innerHTML = '';  // Clear the character preview
 
         if (!characterName || !realm) {
             errorMessage.textContent = 'Both character name and realm are required!';
@@ -48,8 +64,30 @@ document.addEventListener('DOMContentLoaded', () => {
         gearList.innerHTML = '<p>Loading gear...</p>';
 
         let gearData = null;
+        let characterMedia = null;
+
         try {
-            // Try to fetch the gear from all regions
+            // Try to fetch character media (for preview)
+            for (const regionInfo of regions) {
+                characterMedia = await fetchCharacterMedia(characterName, realm, regionInfo);
+                if (characterMedia) {
+                    break;  // Stop searching if we find the media
+                }
+            }
+
+            if (characterMedia && characterMedia.assets) {
+                const avatarUrl = characterMedia.assets.find(asset => asset.key === 'avatar')?.value;  // Avatar URL
+                const inGameRenderUrl = characterMedia.assets.find(asset => asset.key === 'main')?.value;  // In-game render URL
+                
+                // Display the character's preview (in-game render)
+                if (inGameRenderUrl) {
+                    characterPreview.innerHTML = `<img src="${inGameRenderUrl}" alt="Character Preview">`;
+                } else if (avatarUrl) {
+                    characterPreview.innerHTML = `<img src="${avatarUrl}" alt="Character Avatar">`;
+                }
+            }
+
+            // Fetch the character's gear
             for (const regionInfo of regions) {
                 gearData = await fetchGearForRegion(characterName, realm, regionInfo);
                 if (gearData) {
@@ -60,6 +98,23 @@ document.addEventListener('DOMContentLoaded', () => {
             gearList.innerHTML = '';  // Clear the loading message
 
             if (gearData && gearData.equipped_items && gearData.equipped_items.length > 0) {
+                let totalItemLevel = 0;
+                let itemCount = 0;
+
+                for (const item of gearData.equipped_items) {
+                    if (item.level && item.level.value) {
+                        totalItemLevel += item.level.value;
+                        itemCount++;
+                    }
+                }
+
+                if (itemCount > 0) {
+                    const averageItemLevel = (totalItemLevel / itemCount).toFixed(2);
+                    itemLevelDisplay.textContent = `Average Item Level: ${averageItemLevel}`;
+                } else {
+                    itemLevelDisplay.textContent = 'Average Item Level: N/A';
+                }
+
                 // Loop through each equipped item and display it
                 for (const item of gearData.equipped_items) {
                     const gearItem = document.createElement('div');
@@ -69,9 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const itemName = item.name || 'Unknown Item';
                     const itemLevel = item.level && item.level.display_string ? item.level.display_string : 'No Item Level';
 
-                    // Fetch the item media (icon) for each item
                     const itemId = item.item.id;
-                    const iconUrl = fetchItemMedia(itemId);  // Use WowThing icon URL
+                    const iconUrl = fetchItemMedia(itemId);
 
                     gearItem.innerHTML = `
                         <p><strong>${slotName}</strong></p>
@@ -83,8 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     gearList.appendChild(gearItem);
                 }
             } else {
-                // Log the gearData in case it's empty
-                console.log(`No equipped items found for character:`, gearData);
                 gearList.innerHTML = '<p>No gear found for this character across all regions.</p>';
             }
         } catch (error) {

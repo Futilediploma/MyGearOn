@@ -1,22 +1,113 @@
-/* frontend/assets/style.css */
-
-#gear-panel {
+body {
     font-family: Arial, sans-serif;
-    padding: 10px;
-    background-color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e1e;
     color: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+#app {
+    max-width: 320px; /* Standard Twitch extension panel width */
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 14px; /* Slightly smaller for Twitch panel */
+    text-align: center;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+form input {
+    width: calc(50% - 5px);
+    padding: 5px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
+form button {
+    padding: 5px;
+    background-color: #6441a5;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #7d5bbe;
+}
+
+#item-level-display {
+    text-align: center;
+    font-size: 13px; /* Reduced font size */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: bold;
+}
+
+#character-preview {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#character-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #6441a5;
 }
 
 #gear-list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
 }
 
 .gear-item {
-    margin: 10px;
-    padding: 10px;
-    background-color: #444;
-    border-radius: 5px;
-    width: 150px;
+    width: calc(50% - 5px); /* Two items per row */
+    background-color: #2a2a2a;
+    padding: 4px; /* Reduced padding */
+    border-radius: 4px;
     text-align: center;
+    font-size: 11px; /* Reduced font size */
+}
+
+.gear-item img {
+    max-width: 40px; /* Smaller gear icon */
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #6441a5;
+    margin-bottom: 5px;
+}
+
+.gear-item p {
+    margin: 2px 0; /* Reduced margin */
+    font-size: 11px; /* Small text */
+    color: #ddd;
+}
+
+#error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
 }

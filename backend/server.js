@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const { blizzardAuth } = require('./config/blizzard');
 const gearRoutes = require('./routes/gearRoutes');
+const characterMediaRoutes = require('./routes/characterMediaRoutes');  // Import the new route for character media
 
 const app = express();
 
@@ -17,6 +18,7 @@ blizzardAuth();
 
 // API Routes
 app.use('/api/gear', gearRoutes);
+app.use('/api/gear/media', characterMediaRoutes);  // Add the new media route
 
 // Serve the frontend static files
 app.use(express.static(path.join(__dirname, '../frontend')));
