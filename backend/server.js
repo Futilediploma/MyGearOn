@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Serve the index.html file for any route not caught by the API
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 // Start the server

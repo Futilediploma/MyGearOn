@@ -76,32 +76,30 @@ form button:hover {
 }
 
 #gear-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three columns */
+    gap: 8px; /* Adjust gap to fit the smaller columns */
 }
 
 .gear-item {
-    width: calc(50% - 5px); /* Two items per row */
     background-color: #2a2a2a;
-    padding: 4px; /* Reduced padding */
+    padding: 5px;
     border-radius: 4px;
     text-align: center;
-    font-size: 11px; /* Reduced font size */
+    font-size: 10px; /* Further reduced font size for the smaller layout */
 }
 
 .gear-item img {
-    max-width: 40px; /* Smaller gear icon */
+    max-width: 40px; /* Slightly smaller gear icon to fit the three-column layout */
     height: auto;
     border-radius: 4px;
     border: 1px solid #6441a5;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .gear-item p {
-    margin: 2px 0; /* Reduced margin */
-    font-size: 11px; /* Small text */
+    margin: 2px 0;
+    font-size: 10px; /* Smaller text to fit the layout */
     color: #ddd;
 }
 
