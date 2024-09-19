@@ -1,0 +1,10 @@
+if (window.Twitch.ext) {
+    const characterName = 'DefaultCharacter';
+    const realm = 'DefaultRealm';
+
+    // Save the configuration for the broadcaster
+    window.Twitch.ext.configuration.set('broadcaster', '1', JSON.stringify({
+        characterName,
+        realm
+    }));
+}
